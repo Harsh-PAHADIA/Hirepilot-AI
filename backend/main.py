@@ -1,6 +1,14 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import logging
+import traceback
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 from routes.dashboard import router as dashboard_router
 from routes.applications import router as applications_router
@@ -42,11 +50,21 @@ class AnalyzeRequest(BaseModel):
 
 @app.post("/analyze")
 def analyze(req: AnalyzeRequest):
-    result = run_workflow(
-        resume_text=req.resume,
-        jd_text=req.jd
-    )
-    return result
+    logger.info("POST /analyze received")
+    try:
+        result = run_workflow(
+            resume_text=req.resume,
+            jd_text=req.jd
+        )
+        logger.info("POST /analyze completed successfully")
+        return result
+    except Exception as e:
+        tb = traceback.format_exc()
+        logger.error(f"POST /analyze FAILED: {type(e).__name__}: {e}\n{tb}")
+        raise HTTPException(
+            status_code=503,
+            detail=f"Analysis failed: {type(e).__name__}: {str(e)}"
+        )
 
 
 @app.get("/")
