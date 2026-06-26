@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import axios from 'axios'
+import API_URL from "../lib/api"
 import { GripVertical, Clock, CheckCircle2, Calendar, Loader2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -38,7 +39,7 @@ export function ActionCenter() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/tasks')
+        const response = await axios.get(`${API_URL}/tasks`)
         const data = response.data
         
         setColumns(prev => ({
@@ -99,7 +100,7 @@ export function ActionCenter() {
     })
     
     try {
-      await axios.put(`http://localhost:8000/tasks/${draggedTask.db_id}/status`, { column_status: targetColumnId })
+      await axios.put(`${API_URL}/tasks/${draggedTask.db_id}/status`, { column_status: targetColumnId })
     } catch (error) {
       console.error("Error updating task status:", error)
       // On error, reload page or revert state (simplest is alert for hackathon)

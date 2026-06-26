@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import axios from 'axios'
+import API_URL from "../lib/api"
 import { FileText, Briefcase, Zap, AlertTriangle, CheckCircle, ArrowRight } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -22,7 +23,7 @@ export function PlacementAnalysis() {
     setErrorMsg(null)
     
     try {
-      const response = await axios.post('http://localhost:8000/analyze', {
+      const response = await axios.post(`${API_URL}/analyze`, {
         resume: resumeText,
         jd: jdText
       }, { timeout: 180000 })

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import axios from 'axios'
+import API_URL from "../lib/api"
 import { Code2, Database, Users, Building2, ChevronRight, Loader2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
@@ -21,7 +22,7 @@ export function InterviewPrep() {
   useEffect(() => {
     const fetchPrep = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/interview-prep')
+        const response = await axios.get(`${API_URL}/interview-prep`)
         const data = Array.isArray(response.data) ? response.data : []
         setPrepCategories(data.filter(c => c && typeof c === 'object'))
       } catch (error) {

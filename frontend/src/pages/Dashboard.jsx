@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import axios from 'axios'
+import API_URL from "../lib/api"
 import { 
   Users, Briefcase, TrendingUp, Calendar, 
   Activity, Loader2
@@ -29,8 +30,8 @@ export function Dashboard() {
     const fetchData = async () => {
       try {
         const [analyticsRes, tasksRes] = await Promise.all([
-          axios.get('http://localhost:8000/analytics'),
-          axios.get('http://localhost:8000/tasks')
+          axios.get(`${API_URL}/analytics`),
+          axios.get(`${API_URL}/tasks`)
         ])
         
         setData(analyticsRes.data)

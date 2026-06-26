@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import axios from 'axios'
+import API_URL from "../lib/api"
 import { Search, Filter, ArrowUpDown, Loader2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -23,7 +24,7 @@ export function Applications() {
 
   const fetchApplications = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/applications')
+      const response = await axios.get(`${API_URL}/applications`)
       setApplications(response.data)
     } catch (error) {
       console.error("Error fetching applications:", error)
@@ -50,7 +51,7 @@ export function Applications() {
     ))
     
     try {
-      await axios.put(`http://localhost:8000/applications/${appId}/status`, { status: newStatus })
+      await axios.put(`${API_URL}/applications/${appId}/status`, { status: newStatus })
     } catch (error) {
       console.error("Error updating status:", error)
       // Revert on error by refetching
