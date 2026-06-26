@@ -1,0 +1,10 @@
+{
+  "include": [
+    "backend"
+  ],
+  "extraPaths": [
+    "backend"
+  ],
+  "venvPath": "/Users/ibm/Desktop/PROJECT/hirepilot-ai/backend",
+  "venv": ".venv"
+}

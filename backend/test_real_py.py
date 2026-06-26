@@ -1,0 +1,13 @@
+import json
+from services.lemma_provider import LemmaProvider
+
+provider = LemmaProvider()
+print("Sending test request to gap-analyzer...")
+resume_text = "John Doe\nSoftware Engineer\nExperience: 5 years of full-stack development.\nSkills: Python, JavaScript, React, Node.js, PostgreSQL, Docker.\nPrevious Role: Senior Engineer at TechCorp. Built scalable microservices and improved frontend performance by 40%.\nEducation: B.S. in Computer Science."
+jd_text = "Company: DataX Inc.\nRole: Senior Full Stack Engineer\nLocation: Remote\nDescription: We are looking for an experienced software engineer to lead our core product team. You will be responsible for designing and implementing scalable backend services and responsive frontend interfaces.\nRequirements:\n- 4+ years of software engineering experience.\n- Proficiency in Python and React.\n- Experience with SQL databases (PostgreSQL preferred).\n- Knowledge of containerization (Docker, Kubernetes).\n- Strong communication skills."
+
+res = provider.client.analyze_gap(resume_text, jd_text)
+print("Raw AI response:")
+print(repr(res))
+print("Parsed response:")
+print(provider.analyze_gap(resume_text, jd_text))

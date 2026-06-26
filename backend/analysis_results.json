@@ -1,0 +1,45 @@
+{
+  "jd_analysis": {
+    "company": "Target Employer",
+    "role": "Target Role",
+    "required_skills": []
+  },
+  "gap_analysis": {
+    "missing_skills": [],
+    "suggestions": [],
+    "strengths": [
+      "5 years of professional frontend development experience",
+      "Production TypeScript + React stack for type-safe UI development",
+      "Full-stack reach beyond frontend via Node.js backend work",
+      "Explicit focus on UI/UX quality, not just implementation",
+      "Performance optimization orientation (runtime, perceived speed)",
+      "Track record building applications described as scalable"
+    ],
+    "weaknesses": [
+      "Lack of some specific JD requirements"
+    ],
+    "company_fit": "Strong culture fit based on matched traits."
+  },
+  "score": {
+    "score": 75,
+    "interview_probability": 67,
+    "priority_level": "Medium",
+    "matched_skills": [],
+    "missing_skills": [],
+    "reason": "Analysis complete."
+  },
+  "plan": {
+    "today": [],
+    "this_week": []
+  },
+  "interview_prep": [],
+  "application": {
+    "id": 25,
+    "company": "Target Employer",
+    "role": "Target Role",
+    "status": "Saved",
+    "priority_score": 75,
+    "priority_level": "Medium",
+    "interview_probability": 67
+  }
+}

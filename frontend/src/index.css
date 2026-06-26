@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #0B1020;
+    --foreground: #FFFFFF;
+    
+    --card: #151B2E;
+    --card-foreground: #FFFFFF;
+    
+    --popover: #151B2E;
+    --popover-foreground: #FFFFFF;
+    
+    --primary: #4F46E5;
+    --primary-foreground: #FFFFFF;
+    
+    --secondary: #1E293B;
+    --secondary-foreground: #FFFFFF;
+    
+    --muted: #1E293B;
+    --muted-foreground: #94A3B8;
+    
+    --accent: #1E293B;
+    --accent-foreground: #FFFFFF;
+    
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+    
+    --border: #1E293B;
+    --input: #1E293B;
+    --ring: #4F46E5;
+    
+    --radius: 0.5rem;
+  }
+
+  /* Force dark mode behavior since we're dark-mode first */
+  .dark {
+    --background: #0B1020;
+    --foreground: #FFFFFF;
+    /* other variables stay same for dark mode */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}

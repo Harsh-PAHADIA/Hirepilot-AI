@@ -1,0 +1,277 @@
+Collecting google-genai
+  Using cached google_genai-1.47.0-py3-none-any.whl.metadata (46 kB)
+Requirement already satisfied: anyio<5.0.0,>=4.8.0 in ./venv/lib/python3.9/site-packages (from google-genai) (4.12.1)
+Collecting google-auth<3.0.0,>=2.14.1 (from google-genai)
+  Using cached google_auth-2.50.0-py3-none-any.whl.metadata (6.2 kB)
+Collecting httpx<1.0.0,>=0.28.1 (from google-genai)
+  Using cached httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Requirement already satisfied: pydantic<3.0.0,>=2.9.0 in ./venv/lib/python3.9/site-packages (from google-genai) (2.13.4)
+Collecting requests<3.0.0,>=2.28.1 (from google-genai)
+  Using cached requests-2.32.5-py3-none-any.whl.metadata (4.9 kB)
+Collecting tenacity<9.2.0,>=8.2.3 (from google-genai)
+  Using cached tenacity-9.1.2-py3-none-any.whl.metadata (1.2 kB)
+Collecting websockets<15.1.0,>=13.0.0 (from google-genai)
+  Using cached websockets-15.0.1-cp39-cp39-macosx_10_9_x86_64.whl.metadata (6.8 kB)
+Requirement already satisfied: typing-extensions<5.0.0,>=4.11.0 in ./venv/lib/python3.9/site-packages (from google-genai) (4.15.0)
+Requirement already satisfied: exceptiongroup>=1.0.2 in ./venv/lib/python3.9/site-packages (from anyio<5.0.0,>=4.8.0->google-genai) (1.3.1)
+Requirement already satisfied: idna>=2.8 in ./venv/lib/python3.9/site-packages (from anyio<5.0.0,>=4.8.0->google-genai) (3.18)
+Collecting pyasn1-modules>=0.2.1 (from google-auth<3.0.0,>=2.14.1->google-genai)
+  Using cached pyasn1_modules-0.4.2-py3-none-any.whl.metadata (3.5 kB)
+Collecting cryptography>=38.0.3 (from google-auth<3.0.0,>=2.14.1->google-genai)
+  Using cached cryptography-49.0.0.tar.gz (854 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting certifi (from httpx<1.0.0,>=0.28.1->google-genai)
+  Using cached certifi-2026.6.17-py3-none-any.whl.metadata (2.5 kB)
+Collecting httpcore==1.* (from httpx<1.0.0,>=0.28.1->google-genai)
+  Using cached httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Requirement already satisfied: h11>=0.16 in ./venv/lib/python3.9/site-packages (from httpcore==1.*->httpx<1.0.0,>=0.28.1->google-genai) (0.16.0)
+Requirement already satisfied: annotated-types>=0.6.0 in ./venv/lib/python3.9/site-packages (from pydantic<3.0.0,>=2.9.0->google-genai) (0.7.0)
+Requirement already satisfied: pydantic-core==2.46.4 in ./venv/lib/python3.9/site-packages (from pydantic<3.0.0,>=2.9.0->google-genai) (2.46.4)
+Requirement already satisfied: typing-inspection>=0.4.2 in ./venv/lib/python3.9/site-packages (from pydantic<3.0.0,>=2.9.0->google-genai) (0.4.2)
+Collecting charset_normalizer<4,>=2 (from requests<3.0.0,>=2.28.1->google-genai)
+  Using cached charset_normalizer-3.4.7-cp39-cp39-macosx_10_9_universal2.whl.metadata (40 kB)
+Collecting urllib3<3,>=1.21.1 (from requests<3.0.0,>=2.28.1->google-genai)
+  Using cached urllib3-2.6.3-py3-none-any.whl.metadata (6.9 kB)
+Collecting cffi>=2.0.0 (from cryptography>=38.0.3->google-auth<3.0.0,>=2.14.1->google-genai)
+  Using cached cffi-2.0.0-cp39-cp39-macosx_10_13_x86_64.whl.metadata (2.6 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography>=38.0.3->google-auth<3.0.0,>=2.14.1->google-genai)
+  Using cached pycparser-2.23-py3-none-any.whl.metadata (993 bytes)
+Collecting pyasn1<0.7.0,>=0.6.1 (from pyasn1-modules>=0.2.1->google-auth<3.0.0,>=2.14.1->google-genai)
+  Using cached pyasn1-0.6.3-py3-none-any.whl.metadata (8.4 kB)
+Using cached google_genai-1.47.0-py3-none-any.whl (241 kB)
+Using cached google_auth-2.50.0-py3-none-any.whl (246 kB)
+Using cached httpx-0.28.1-py3-none-any.whl (73 kB)
+Using cached httpcore-1.0.9-py3-none-any.whl (78 kB)
+Using cached requests-2.32.5-py3-none-any.whl (64 kB)
+Using cached charset_normalizer-3.4.7-cp39-cp39-macosx_10_9_universal2.whl (299 kB)
+Using cached tenacity-9.1.2-py3-none-any.whl (28 kB)
+Using cached urllib3-2.6.3-py3-none-any.whl (131 kB)
+Using cached websockets-15.0.1-cp39-cp39-macosx_10_9_x86_64.whl (173 kB)
+Using cached certifi-2026.6.17-py3-none-any.whl (133 kB)
+Using cached cffi-2.0.0-cp39-cp39-macosx_10_13_x86_64.whl (184 kB)
+Using cached pyasn1_modules-0.4.2-py3-none-any.whl (181 kB)
+Using cached pyasn1-0.6.3-py3-none-any.whl (83 kB)
+Using cached pycparser-2.23-py3-none-any.whl (118 kB)
+Building wheels for collected packages: cryptography
+  Building wheel for cryptography (pyproject.toml): started
+  Building wheel for cryptography (pyproject.toml): finished with status 'error'
+  error: subprocess-exited-with-error
+  
+  × Building wheel for cryptography (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [199 lines of output]
+      Python reports SOABI: cpython-39-darwin
+      Computed rustc target triple: x86_64-apple-darwin
+      Installation directory: /Users/ibm/Library/Caches/puccinialin
+      Rustup already downloaded
+      Installing rust to /Users/ibm/Library/Caches/puccinialin/rustup
+      warn: It looks like you have an existing rustup settings file at:
+      warn: /Users/ibm/Library/Caches/puccinialin/rustup/settings.toml
+      warn: Rustup will install the default toolchain as specified in the settings file,
+      warn: instead of the one inferred from the default host triple.
+      info: profile set to minimal
+      info: setting default host triple to x86_64-apple-darwin
+      warn: Updating existing toolchain, profile choice will be ignored
+      info: syncing channel updates for stable-x86_64-apple-darwin
+      info: default toolchain set to stable-x86_64-apple-darwin
+      Checking if cargo is installed
+      cargo 1.96.0 (30a34c682 2026-05-25)
+      Rust not found, installing into a temporary directory
+      Running `maturin pep517 build-wheel -i /Users/ibm/Desktop/PROJECT/hirepilot-ai/backend/venv/bin/python3 --compatibility off`
+      🍹 Building a mixed python/rust project
+      🐍 Found CPython 3.9 at /Users/ibm/Desktop/PROJECT/hirepilot-ai/backend/venv/bin/python3
+      🔗 Found pyo3 bindings with abi3 support
+      📡 Using build options locked from pyproject.toml
+      💻 Using `MACOSX_DEPLOYMENT_TARGET=10.12` for x86_64-apple-darwin by default
+         Compiling proc-macro2 v1.0.106
+         Compiling unicode-ident v1.0.24
+         Compiling quote v1.0.45
+         Compiling shlex v2.0.1
+         Compiling find-msvc-tools v0.1.9
+         Compiling target-lexicon v0.13.5
+         Compiling pkg-config v0.3.33
+         Compiling vcpkg v0.2.15
+         Compiling libc v0.2.186
+         Compiling foreign-types-shared v0.1.1
+         Compiling heck v0.5.0
+         Compiling openssl v0.10.81
+         Compiling itoa v1.0.18
+         Compiling cfg-if v1.0.4
+         Compiling bitflags v2.13.0
+         Compiling cryptography-openssl v0.49.0 (/private/var/folders/7y/3zy2txg97zz1ffsjxqjd6ctr0000gn/T/pip-install-zjkno5so/cryptography_a999f3a5e87547f09ff329c92572bbed/src/rust/cryptography-openssl)
+         Compiling foreign-types v0.3.2
+         Compiling once_cell v1.21.4
+         Compiling cryptography-key-parsing v0.49.0 (/private/var/folders/7y/3zy2txg97zz1ffsjxqjd6ctr0000gn/T/pip-install-zjkno5so/cryptography_a999f3a5e87547f09ff329c92572bbed/src/rust/cryptography-key-parsing)
+         Compiling base64 v0.22.1
+         Compiling cc v1.2.64
+         Compiling self_cell v1.2.2
+         Compiling pem v3.0.6
+         Compiling openssl-sys v0.9.117
+         Compiling cryptography-cffi v0.49.0 (/private/var/folders/7y/3zy2txg97zz1ffsjxqjd6ctr0000gn/T/pip-install-zjkno5so/cryptography_a999f3a5e87547f09ff329c92572bbed/src/rust/cryptography-cffi)
+         Compiling syn v2.0.117
+         Compiling pyo3-build-config v0.29.0
+      warning: openssl-sys@0.9.117: Could not find directory of OpenSSL installation, and this `-sys` crate cannot proceed without this knowledge. If OpenSSL is installed and this crate had trouble finding it,  you can set the `OPENSSL_DIR` environment variable for the compilation process. See stderr section below for further information.
+      error: failed to run custom build command for `openssl-sys v0.9.117`
+      
+      Caused by:
+        process didn't exit successfully: `/private/var/folders/7y/3zy2txg97zz1ffsjxqjd6ctr0000gn/T/pip-install-zjkno5so/cryptography_a999f3a5e87547f09ff329c92572bbed/target/release/build/openssl-sys-9779dd73fcfbd72d/build-script-main` (exit status: 101)
+        --- stdout
+        cargo:rustc-check-cfg=cfg(osslconf, values("OPENSSL_NO_OCB", "OPENSSL_NO_SM4", "OPENSSL_NO_SEED", "OPENSSL_NO_CHACHA", "OPENSSL_NO_CAST", "OPENSSL_NO_IDEA", "OPENSSL_NO_CAMELLIA", "OPENSSL_NO_RC4", "OPENSSL_NO_BF", "OPENSSL_NO_PSK", "OPENSSL_NO_DEPRECATED_3_0", "OPENSSL_NO_SCRYPT", "OPENSSL_NO_SM3", "OPENSSL_NO_RMD160", "OPENSSL_NO_EC2M", "OPENSSL_NO_OCSP", "OPENSSL_NO_CMS", "OPENSSL_NO_COMP", "OPENSSL_NO_SOCK", "OPENSSL_NO_STDIO", "OPENSSL_NO_EC", "OPENSSL_NO_SSL3_METHOD", "OPENSSL_NO_KRB5", "OPENSSL_NO_TLSEXT", "OPENSSL_NO_SRP", "OPENSSL_NO_SRTP", "OPENSSL_NO_RFC3779", "OPENSSL_NO_SHA", "OPENSSL_NO_NEXTPROTONEG", "OPENSSL_NO_ENGINE", "OPENSSL_NO_BUF_FREELISTS", "OPENSSL_NO_RC2"))
+        cargo:rustc-check-cfg=cfg(openssl)
+        cargo:rustc-check-cfg=cfg(libressl)
+        cargo:rustc-check-cfg=cfg(boringssl)
+        cargo:rustc-check-cfg=cfg(awslc)
+        cargo:rustc-check-cfg=cfg(awslc_pregenerated)
+        cargo:rustc-check-cfg=cfg(libressl250)
+        cargo:rustc-check-cfg=cfg(libressl251)
+        cargo:rustc-check-cfg=cfg(libressl252)
+        cargo:rustc-check-cfg=cfg(libressl261)
+        cargo:rustc-check-cfg=cfg(libressl270)
+        cargo:rustc-check-cfg=cfg(libressl271)
+        cargo:rustc-check-cfg=cfg(libressl273)
+        cargo:rustc-check-cfg=cfg(libressl280)
+        cargo:rustc-check-cfg=cfg(libressl281)
+        cargo:rustc-check-cfg=cfg(libressl291)
+        cargo:rustc-check-cfg=cfg(libressl310)
+        cargo:rustc-check-cfg=cfg(libressl321)
+        cargo:rustc-check-cfg=cfg(libressl332)
+        cargo:rustc-check-cfg=cfg(libressl340)
+        cargo:rustc-check-cfg=cfg(libressl350)
+        cargo:rustc-check-cfg=cfg(libressl360)
+        cargo:rustc-check-cfg=cfg(libressl361)
+        cargo:rustc-check-cfg=cfg(libressl370)
+        cargo:rustc-check-cfg=cfg(libressl380)
+        cargo:rustc-check-cfg=cfg(libressl381)
+        cargo:rustc-check-cfg=cfg(libressl382)
+        cargo:rustc-check-cfg=cfg(libressl390)
+        cargo:rustc-check-cfg=cfg(libressl400)
+        cargo:rustc-check-cfg=cfg(libressl410)
+        cargo:rustc-check-cfg=cfg(libressl420)
+        cargo:rustc-check-cfg=cfg(libressl430)
+        cargo:rustc-check-cfg=cfg(ossl101)
+        cargo:rustc-check-cfg=cfg(ossl102)
+        cargo:rustc-check-cfg=cfg(ossl102f)
+        cargo:rustc-check-cfg=cfg(ossl102h)
+        cargo:rustc-check-cfg=cfg(ossl110)
+        cargo:rustc-check-cfg=cfg(ossl110f)
+        cargo:rustc-check-cfg=cfg(ossl110g)
+        cargo:rustc-check-cfg=cfg(ossl110h)
+        cargo:rustc-check-cfg=cfg(ossl111)
+        cargo:rustc-check-cfg=cfg(ossl111b)
+        cargo:rustc-check-cfg=cfg(ossl111c)
+        cargo:rustc-check-cfg=cfg(ossl111d)
+        cargo:rustc-check-cfg=cfg(ossl300)
+        cargo:rustc-check-cfg=cfg(ossl310)
+        cargo:rustc-check-cfg=cfg(ossl320)
+        cargo:rustc-check-cfg=cfg(ossl330)
+        cargo:rustc-check-cfg=cfg(ossl340)
+        cargo:rustc-check-cfg=cfg(ossl400)
+        cargo:rerun-if-env-changed=X86_64_APPLE_DARWIN_OPENSSL_LIB_DIR
+        X86_64_APPLE_DARWIN_OPENSSL_LIB_DIR unset
+        cargo:rerun-if-env-changed=OPENSSL_LIB_DIR
+        OPENSSL_LIB_DIR unset
+        cargo:rerun-if-env-changed=X86_64_APPLE_DARWIN_OPENSSL_INCLUDE_DIR
+        X86_64_APPLE_DARWIN_OPENSSL_INCLUDE_DIR unset
+        cargo:rerun-if-env-changed=OPENSSL_INCLUDE_DIR
+        OPENSSL_INCLUDE_DIR unset
+        cargo:rerun-if-env-changed=X86_64_APPLE_DARWIN_OPENSSL_DIR
+        X86_64_APPLE_DARWIN_OPENSSL_DIR unset
+        cargo:rerun-if-env-changed=OPENSSL_DIR
+        OPENSSL_DIR unset
+        cargo:rerun-if-env-changed=OPENSSL_NO_PKG_CONFIG
+        cargo:rerun-if-env-changed=PKG_CONFIG_x86_64-apple-darwin
+        cargo:rerun-if-env-changed=PKG_CONFIG_x86_64_apple_darwin
+        cargo:rerun-if-env-changed=HOST_PKG_CONFIG
+        cargo:rerun-if-env-changed=PKG_CONFIG
+        cargo:rerun-if-env-changed=OPENSSL_STATIC
+        cargo:rerun-if-env-changed=OPENSSL_DYNAMIC
+        cargo:rerun-if-env-changed=PKG_CONFIG_ALL_STATIC
+        cargo:rerun-if-env-changed=PKG_CONFIG_ALL_DYNAMIC
+        cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64-apple-darwin
+        cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64_apple_darwin
+        cargo:rerun-if-env-changed=HOST_PKG_CONFIG_PATH
+        cargo:rerun-if-env-changed=PKG_CONFIG_PATH
+        cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64-apple-darwin
+        cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64_apple_darwin
+        cargo:rerun-if-env-changed=HOST_PKG_CONFIG_LIBDIR
+        cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR
+        cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64-apple-darwin
+        cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64_apple_darwin
+        cargo:rerun-if-env-changed=HOST_PKG_CONFIG_SYSROOT_DIR
+        cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR
+        cargo:rerun-if-env-changed=OPENSSL_STATIC
+        cargo:rerun-if-env-changed=OPENSSL_DYNAMIC
+        cargo:rerun-if-env-changed=PKG_CONFIG_ALL_STATIC
+        cargo:rerun-if-env-changed=PKG_CONFIG_ALL_DYNAMIC
+        cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64-apple-darwin
+        cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64_apple_darwin
+        cargo:rerun-if-env-changed=HOST_PKG_CONFIG_PATH
+        cargo:rerun-if-env-changed=PKG_CONFIG_PATH
+        cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64-apple-darwin
+        cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64_apple_darwin
+        cargo:rerun-if-env-changed=HOST_PKG_CONFIG_LIBDIR
+        cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR
+        cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64-apple-darwin
+        cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64_apple_darwin
+        cargo:rerun-if-env-changed=HOST_PKG_CONFIG_SYSROOT_DIR
+        cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR
+      
+      
+        Could not find openssl via pkg-config:
+        Could not run `PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 pkg-config --libs --cflags openssl`
+        The pkg-config command could not be found.
+      
+        Most likely, you need to install a pkg-config package for your OS.
+        Try `brew install pkgconf` if you have Homebrew.
+      
+        If you've already installed it, ensure the pkg-config command is one of the
+        directories in the PATH environment variable.
+      
+        If you did not expect this build to link to a pre-installed system library,
+        then check documentation of the openssl-sys crate for an option to
+        build the library from source, or disable features or dependencies
+        that require pkg-config.
+      
+        cargo:warning=Could not find directory of OpenSSL installation, and this `-sys` crate cannot proceed without this knowledge. If OpenSSL is installed and this crate had trouble finding it,  you can set the `OPENSSL_DIR` environment variable for the compilation process. See stderr section below for further information.
+      
+        --- stderr
+      
+      
+        Could not find directory of OpenSSL installation, and this `-sys` crate cannot
+        proceed without this knowledge. If OpenSSL is installed and this crate had
+        trouble finding it,  you can set the `OPENSSL_DIR` environment variable for the
+        compilation process.
+      
+        Make sure you also have the development packages of openssl installed.
+        For example, `libssl-dev` on Ubuntu or `openssl-devel` on Fedora.
+      
+        If you're in a situation where you think the directory *should* be found
+        automatically, please open a bug at https://github.com/rust-openssl/rust-openssl
+        and include information about your system as well as this message.
+      
+        $HOST = x86_64-apple-darwin
+        $TARGET = x86_64-apple-darwin
+        openssl-sys = 0.9.117
+      
+      
+      warning: build failed, waiting for other jobs to finish...
+      💥 maturin failed
+        Caused by: Failed to build a native library through cargo
+        Caused by: Cargo build finished with "exit status: 101": `env -u CARGO CARGO_ENCODED_RUSTFLAGS="-C\u{1f}link-arg=-undefined\u{1f}-C\u{1f}link-arg=dynamic_lookup" MACOSX_DEPLOYMENT_TARGET="10.12" PYO3_BUILD_EXTENSION_MODULE="1" PYO3_CONFIG_FILE="/private/var/folders/7y/3zy2txg97zz1ffsjxqjd6ctr0000gn/T/pip-install-zjkno5so/cryptography_a999f3a5e87547f09ff329c92572bbed/target/maturin/pyo3-config-x86_64-apple-darwin-3.9-abi3.txt" PYO3_ENVIRONMENT_SIGNATURE="cpython-3.9-64bit" PYO3_PYTHON="/Users/ibm/Desktop/PROJECT/hirepilot-ai/backend/venv/bin/python3" PYTHON_SYS_EXECUTABLE="/Users/ibm/Desktop/PROJECT/hirepilot-ai/backend/venv/bin/python3" "cargo" "rustc" "--profile" "release" "--message-format" "json-render-diagnostics" "--locked" "--manifest-path" "/private/var/folders/7y/3zy2txg97zz1ffsjxqjd6ctr0000gn/T/pip-install-zjkno5so/cryptography_a999f3a5e87547f09ff329c92572bbed/src/rust/Cargo.toml" "--lib" "--" "-C" "link-args=-Wl,-install_name,@rpath/cryptography.hazmat.bindings._rust.abi3.so"`
+      Error: command ['maturin', 'pep517', 'build-wheel', '-i', '/Users/ibm/Desktop/PROJECT/hirepilot-ai/backend/venv/bin/python3', '--compatibility', 'off'] returned non-zero exit status 1
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+  ERROR: Failed building wheel for cryptography
+Failed to build cryptography
+error: failed-wheel-build-for-install
+
+× Failed to build installable wheels for some pyproject.toml based projects
+╰─> cryptography
