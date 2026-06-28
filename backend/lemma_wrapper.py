@@ -1,8 +1,11 @@
 import os
-import time
+import json
 import logging
+import httpx
+import time
 import traceback
 import lemma_sdk
+from lemma_sdk.errors import LemmaTimeoutError, LemmaAuthError
 
 logger = logging.getLogger(__name__)
 
@@ -13,8 +16,6 @@ _DEFAULT_ORG_ID = "019efee7-2093-73dc-990a-fabc1b5eec32"
 
 class LemmaClient:
     def __init__(self, api_key=None):
-        # Read credentials from environment variables first (required on Render/production).
-        # Falls back to ~/.lemma/config.json (used locally after `lemma auth login`).
         token = api_key or os.environ.get("LEMMA_TOKEN")
         pod_id = os.environ.get("LEMMA_POD_ID") or _DEFAULT_POD_ID
         org_id = os.environ.get("LEMMA_ORG_ID") or _DEFAULT_ORG_ID
@@ -24,13 +25,24 @@ class LemmaClient:
             f"pod_id={pod_id}, org_id={org_id}"
         )
 
+        custom_client = httpx.Client(timeout=180.0)
+        
+        if not token:
+            try:
+                config_path = os.path.expanduser("~/.lemma/config.json")
+                with open(config_path, "r") as f:
+                    config = json.load(f)
+                    token = config.get("token")
+            except Exception as e:
+                logger.warning(f"Failed to read lemma config: {e}")
+        
         if token:
-            # Production path: token supplied via env var
-            self.client = lemma_sdk.Lemma(token=token)
+            self.client = lemma_sdk.Lemma(token=token, timeout=180.0)
         else:
-            # Local dev path: token loaded from ~/.lemma/config.json
-            logger.info("LEMMA_TOKEN not set — falling back to ~/.lemma/config.json")
-            self.client = lemma_sdk.Lemma.from_env()
+            logger.info("LEMMA_TOKEN not set and config not found — falling back to env")
+            self.client = lemma_sdk.Lemma(timeout=180.0)
+
+
 
         self.pod = self.client.pod(pod_id, org_id=org_id)
         logger.info("LemmaClient: pod client created successfully")
@@ -43,6 +55,7 @@ class LemmaClient:
             conv_id = str(conv.id)
             logger.info(f"Agent {agent_slug}: conversation started id={conv_id}")
 
+            last_text = None
             for attempt in range(35):  # ~52 seconds max
                 time.sleep(1.5)
                 try:
@@ -53,6 +66,16 @@ class LemmaClient:
                     )
                     continue
 
+                # Collect ALL assistant TEXT messages — combine them if there are multiple
+                assistant_texts = [
+                    m.text for m in msgs
+                    if m.role == "assistant" and m.text and m.text.strip()
+                    and m.kind.value == "TEXT"
+                ]
+                if assistant_texts:
+                    last_text = "\n".join(assistant_texts)
+
+                # Check if the final message is marked complete
                 for m in reversed(msgs):
                     if m.role == "assistant" and m.text is not None:
                         meta = getattr(m, "metadata", None)
@@ -60,21 +83,22 @@ class LemmaClient:
                             props = getattr(meta, "additional_properties", {})
                             if props.get("is_final_answer"):
                                 elapsed = time.time() - start_time
-                                logger.info(
-                                    f"Agent {agent_slug}: final_answer in {elapsed:.2f}s"
-                                )
-                                logger.debug(f"Agent {agent_slug} raw: {m.text!r}")
-                                return m.text
+                                result = last_text or m.text
+                                logger.info(f"Agent {agent_slug}: final_answer in {elapsed:.2f}s")
+                                logger.info(f"Agent {agent_slug} raw: {result!r}")
+                                return result
                         if m.kind.value == "TEXT":
                             elapsed = time.time() - start_time
-                            logger.info(
-                                f"Agent {agent_slug}: TEXT response in {elapsed:.2f}s"
-                            )
-                            logger.debug(f"Agent {agent_slug} raw: {m.text!r}")
-                            return m.text
+                            result = last_text or m.text
+                            logger.info(f"Agent {agent_slug}: TEXT response in {elapsed:.2f}s")
+                            logger.info(f"Agent {agent_slug} raw: {result!r}")
+                            return result
 
             elapsed = time.time() - start_time
             logger.error(f"Agent {agent_slug}: timed out after {elapsed:.2f}s")
+            if last_text:
+                logger.info(f"Agent {agent_slug}: returning partial text collected so far")
+                return last_text
 
         except Exception as e:
             elapsed = time.time() - start_time
@@ -85,52 +109,159 @@ class LemmaClient:
 
         return "{}"
 
+    def _send_followup(self, conv_id: str, message: str) -> None:
+        """Send a follow-up message into an existing conversation."""
+        try:
+            self.pod.conversations.send(conv_id, message)
+            logger.info(f"Follow-up sent to conv {conv_id}")
+        except Exception as e:
+            logger.warning(f"Failed to send follow-up: {e}")
+
+    def _poll_for_new_reply(self, conv_id: str, after_count: int, timeout_attempts: int = 30) -> str:
+        """Poll until a new TEXT message appears beyond after_count total messages."""
+        for _ in range(timeout_attempts):
+            time.sleep(2)
+            try:
+                msgs = self.pod.conversations.messages(conv_id).items
+            except Exception:
+                continue
+            if len(msgs) > after_count:
+                for m in reversed(msgs):
+                    if m.role == "assistant" and m.text and m.kind.value == "TEXT":
+                        logger.info(f"Follow-up reply received: {m.text[:200]!r}")
+                        return m.text
+        return ""
+
     def analyze_resume(self, text: str) -> str:
+
         prompt = (
-            f"Analyze this resume. You MUST return ONLY valid JSON in a ```json codeblock. "
-            f'Schema: {{"strengths": ["str"]}}\n\n{text}'
+            "Fill in the blanks in this JSON using the resume below. "
+            "Output ONLY the completed JSON, nothing else:\n"
+            '{"strengths": ["STRENGTH_1", "STRENGTH_2", "STRENGTH_3"]}\n\n'
+            f"Resume:\n{text}"
         )
         return self._run_agent_sync("resume-analyst", prompt)
 
     def analyze_jd(self, text: str) -> str:
         prompt = (
-            f"Analyze this JD. You MUST return ONLY valid JSON in a ```json codeblock. "
-            f'Schema: {{"company": "str", "role": "str", "required_skills": ["str"]}}\n\n{text}'
+            "Fill in the blanks in this JSON using the job description below. "
+            "Output ONLY the completed JSON, nothing else:\n"
+            '{"company": "COMPANY_NAME", "role": "JOB_TITLE", "required_skills": ["SKILL_1", "SKILL_2", "SKILL_3"]}\n\n'
+            f"Job Description:\n{text}"
         )
         return self._run_agent_sync("jd-analyst", prompt)
 
     def analyze_gap(self, resume_text: str, jd_text: str) -> str:
         prompt = (
-            f"Analyze the gap. You MUST return ONLY valid JSON in a ```json codeblock. "
-            f'Schema: {{"missing_skills": ["str"], "suggestions": ["str"], '
-            f'"strengths": ["str"], "weaknesses": ["str"], "company_fit": "str"}}\n\n'
-            f"Resume:\n{resume_text}\n\nJD:\n{jd_text}"
+            "Fill in the blanks in this JSON by analyzing the resume against the job description. "
+            "Output ONLY the completed JSON, nothing else:\n"
+            '{"missing_skills": ["SKILL_1", "SKILL_2"], '
+            '"suggestions": ["SUGGESTION_1", "SUGGESTION_2"], '
+            '"strengths": ["STRENGTH_1", "STRENGTH_2"], '
+            '"weaknesses": ["WEAKNESS_1", "WEAKNESS_2"], '
+            '"company_fit": "SHORT_FIT_DESCRIPTION"}\n\n'
+            f"Resume:\n{resume_text}\n\nJob Description:\n{jd_text}"
         )
         return self._run_agent_sync("gap-analyzer", prompt)
 
     def score_job(self, resume_text: str, jd_text: str) -> str:
         prompt = (
-            f"Score the match. You MUST return ONLY valid JSON in a ```json codeblock. "
-            f'Schema: {{"score": int (0-100), "priority_level": "High|Medium|Low", '
-            f'"interview_probability": int, "matched_skills": ["str"], '
-            f'"missing_skills": ["str"], "reason": "str"}}\n\n'
-            f"Resume:\n{resume_text}\n\nJD:\n{jd_text}"
+            "Fill in the blanks in this JSON by scoring how well the resume matches the job description. "
+            "Output ONLY the completed JSON, nothing else:\n"
+            '{"score": 75, "priority_level": "High", "interview_probability": 70, '
+            '"matched_skills": ["SKILL_1", "SKILL_2"], '
+            '"missing_skills": ["SKILL_1"], '
+            '"reason": "ONE_SENTENCE_REASON"}\n\n'
+            "Rules: score is 0-100, priority_level is exactly High/Medium/Low, "
+            "interview_probability is 0-100.\n\n"
+            f"Resume:\n{resume_text}\n\nJob Description:\n{jd_text}"
         )
         return self._run_agent_sync("match-scorer", prompt)
 
     def prepare_interview(self, resume_text: str, jd_text: str) -> str:
         prompt = (
-            f"Prepare interview. You MUST return ONLY valid JSON in a ```json codeblock. "
-            f'Schema: {{"questions": [{{"category": "str", "difficulty": "str", '
-            f'"q": "str", "company": "str"}}]}}\n\n'
-            f"Resume:\n{resume_text}\n\nJD:\n{jd_text}"
+            "Write exactly 5 interview questions for the candidate below. "
+            "Do NOT call any tools. Do NOT generate a summary. "
+            "Write the questions directly, numbered 1 to 5, one per line. "
+            "Each line must follow this format exactly:\n"
+            "1. [Category] ([Difficulty]): Question text here?\n"
+            "Categories: Behavioral, Technical, System Design\n"
+            "Difficulties: Easy, Medium, Hard\n\n"
+            f"Resume:\n{resume_text}\n\nJob Description:\n{jd_text}"
         )
-        return self._run_agent_sync("interview-coach", prompt)
+        start_time = time.time()
+        try:
+            conv = self.pod.agents.run("interview-coach", prompt)
+            conv_id = str(conv.id)
+            logger.info(f"interview-coach: conv started {conv_id}")
+
+            last_text = None
+            first_reply_msg_count = 0
+            for attempt in range(35):
+                time.sleep(1.5)
+                try:
+                    msgs = self.pod.conversations.messages(conv_id).items
+                except Exception:
+                    continue
+
+                assistant_texts = [
+                    m.text for m in msgs
+                    if m.role == "assistant" and m.text and m.text.strip()
+                    and m.kind.value == "TEXT"
+                ]
+                if assistant_texts:
+                    last_text = "\n".join(assistant_texts)
+
+                for m in reversed(msgs):
+                    if m.role == "assistant" and m.text is not None:
+                        meta = getattr(m, "metadata", None)
+                        props = getattr(meta, "additional_properties", {}) if meta else {}
+                        if props.get("is_final_answer") or m.kind.value == "TEXT":
+                            result = last_text or m.text
+                            elapsed = time.time() - start_time
+                            logger.info(f"interview-coach: first reply in {elapsed:.2f}s: {result[:150]!r}")
+
+                            # If the reply has questions, return it immediately
+                            if '?' in result and len(result) > 50:
+                                return result
+
+                            # Agent returned a summary — send follow-up to get the actual questions
+                            logger.warning("interview-coach returned summary, sending follow-up")
+                            first_reply_msg_count = len(msgs)
+                            self._send_followup(
+                                conv_id,
+                                "Now write the 5 questions out, numbered 1 to 5, one per line. "
+                                "Format: 1. [Category] (Difficulty): Question text?"
+                            )
+                            followup_reply = self._poll_for_new_reply(
+                                conv_id, first_reply_msg_count, timeout_attempts=25
+                            )
+                            if followup_reply:
+                                logger.info(f"interview-coach follow-up reply: {followup_reply[:200]!r}")
+                                return followup_reply
+                            logger.error("interview-coach follow-up timed out")
+                            return result  # return summary as fallback
+
+            elapsed = time.time() - start_time
+            logger.error(f"interview-coach timed out after {elapsed:.2f}s")
+            return last_text or "{}"
+
+        except Exception as e:
+            logger.error(f"interview-coach exception: {type(e).__name__}: {e}\n{traceback.format_exc()}")
+            return "{}"
 
     def generate_plan(self, gap_analysis_json: str) -> str:
         prompt = (
-            f"Generate plan. You MUST return ONLY valid JSON in a ```json codeblock. "
-            f'Schema: {{"today": ["str"], "this_week": ["str"]}}\n\n'
+            "Create an action plan with exactly two sections. "
+            "Write it in this exact format — no other text:\n\n"
+            "Today:\n"
+            "- Action item 1\n"
+            "- Action item 2\n"
+            "- Action item 3\n\n"
+            "This Week:\n"
+            "- Action item 1\n"
+            "- Action item 2\n"
+            "- Action item 3\n\n"
             f"Gap Analysis:\n{gap_analysis_json}"
         )
         return self._run_agent_sync("placement-planner", prompt)
