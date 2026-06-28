@@ -16,13 +16,14 @@ def test_lemma_endpoint():
         
         client = LemmaClient()
         
-        res = client._run_agent_sync("jd-analyst", "Test ping")
+        # Call SDK directly to bypass wrapper's try/except block that returns "{}"
+        conv = client.pod.agents.run("jd-analyst", "Test ping")
         
         return {
             "success": True,
             "has_lemma_token_env": has_token,
             "has_lemma_api_key_env": has_api_key,
-            "result": res
+            "result": str(conv.id)
         }
     except Exception as e:
         return {
