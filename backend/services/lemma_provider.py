@@ -116,17 +116,22 @@ def extract_sentences_from_prose(text: str, max_items: int = 4) -> list[str]:
 
 def extract_score_from_prose(text: str) -> int | None:
     """Pull a numeric score (0-100) from prose."""
+    text_lower = text.lower()
+    if "exact match" in text_lower or "matches both" in text_lower or "matches all" in text_lower:
+        return 100
     patterns = [
-        r'(\d{1,3})\s*/\s*100',                # 75/100
         r'score[:\s]+(\d{1,3})',                # score: 75
+        r'(\d{1,3})\s*/\s*100',                # 75/100
         r'(\d{1,3})\s*(?:percent|%)',           # 75%
-        r'(\d)\s*/\s*(\d)\s*required',         # 4/5 required → 80
-        r'(\d)\s*(?:of|out of)\s*(\d)',        # 4 of 5
+        r'(\d+)\s*/\s*(\d+)\s*required',        # 4/5 required
+        r'(\d+)\s*/\s*(\d+)\s*skills',          # 4/5 skills
+        r'matches\s+(\d+)\s*(?:of|out of)\s*(\d+)', # matches 4 of 5
+        r'(\d+)\s*(?:of|out of)\s*(\d+)',       # 4 of 5
     ]
     for p in patterns:
         m = re.search(p, text, re.IGNORECASE)
         if m:
-            if m.lastindex == 2:  # fraction X/Y
+            if m.lastindex >= 2:  # fraction X/Y
                 num, den = int(m.group(1)), int(m.group(2))
                 if den > 0:
                     return round((num / den) * 100)
@@ -136,13 +141,12 @@ def extract_score_from_prose(text: str) -> int | None:
                     return val
     return None
 
-
 def extract_priority_from_prose(text: str) -> str:
     """Extract High/Medium/Low priority from prose."""
     text_lower = text.lower()
-    if any(w in text_lower for w in ["strong match", "high priority", "excellent", "great fit", "exceeds", "4/5", "5/5"]):
+    if any(w in text_lower for w in ["strong match", "high priority", "excellent", "great fit", "exceeds", "4/5", "5/5", "exact match", "matches both", "matches all"]):
         return "High"
-    if any(w in text_lower for w in ["moderate", "medium", "partial", "decent", "3/5", "good match"]):
+    if any(w in text_lower for w in ["moderate", "medium", "partial", "decent", "3/5", "good match", "average"]):
         return "Medium"
     return "Low"
 
@@ -256,15 +260,26 @@ class LemmaProvider(BaseAIProvider):
 
         score = extract_score_from_prose(raw)
         priority = extract_priority_from_prose(raw)
+        
+        matched = extract_skills_from_prose(resume_text)
+        jd_skills = extract_skills_from_prose(jd_text)
+        missing = [s for s in jd_skills if s.lower() not in resume_text.lower()]
+        
+        # Calculate a fallback score if missing
+        if score is None:
+            if jd_skills:
+                matched_count = max(0, len(jd_skills) - len(missing))
+                score = round((matched_count / len(jd_skills)) * 100)
+            else:
+                score = 50
+
         # Override priority with score-based threshold if prose didn't give a clear signal
         if priority == "Low" and score is not None:
             if score >= 70:
                 priority = "High"
-            elif score >= 50:
+            elif score >= 40:
                 priority = "Medium"
-        matched = extract_skills_from_prose(resume_text)
-        jd_skills = extract_skills_from_prose(jd_text)
-        missing = [s for s in jd_skills if s.lower() not in resume_text.lower()]
+
         reason = extract_sentences_from_prose(raw, max_items=1)
 
         return {
@@ -273,7 +288,7 @@ class LemmaProvider(BaseAIProvider):
             "interview_probability": score,
             "matched_skills": matched,
             "missing_skills": missing,
-            "reason": reason[0] if reason else raw[:200],
+            "reason": reason[0] if reason else "Detailed assessment generated.",
         }
 
     def generate_plan(self, gap_analysis: dict) -> dict:
@@ -317,15 +332,19 @@ class LemmaProvider(BaseAIProvider):
             today     = parse_action_block(today_match.group(1)) if today_match else []
             this_week = parse_action_block(week_match.group(1))  if week_match  else []
         else:
-            # Fallback: split on sentence endings
-            parts     = re.split(r'(?<=[.!?;])\s+', raw.strip())
-            sentences = [p.strip() for p in parts if len(p.strip()) > 15]
-            today     = sentences[:3]
-            this_week = sentences[3:6]
+            # Fallback: split on sentence endings and distribute evenly
+            sentences = extract_sentences_from_prose(raw, max_items=6)
+            if len(sentences) <= 1:
+                today = sentences
+                this_week = []
+            else:
+                mid = len(sentences) // 2 + (len(sentences) % 2)
+                today = sentences[:mid]
+                this_week = sentences[mid:]
 
         return {
             "today": today,
-            "this_week": this_week,
+            "this_week": this_week
         }
 
 

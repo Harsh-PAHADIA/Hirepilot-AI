@@ -16,25 +16,24 @@ _DEFAULT_ORG_ID = "019efee7-2093-73dc-990a-fabc1b5eec32"
 
 class LemmaClient:
     def __init__(self, api_key=None):
-        token = api_key or os.environ.get("LEMMA_TOKEN")
         pod_id = os.environ.get("LEMMA_POD_ID") or _DEFAULT_POD_ID
         org_id = os.environ.get("LEMMA_ORG_ID") or _DEFAULT_ORG_ID
+
+        token = api_key
+        if not token:
+            try:
+                import subprocess
+                # This guarantees a fresh token locally, avoiding 401s in long-running dev servers.
+                # In production (Render), this may fail if CLI isn't installed, so we fallback to env var.
+                token = subprocess.check_output(["lemma", "auth", "print-token"], text=True, stderr=subprocess.DEVNULL).strip()
+            except Exception as e:
+                logger.info(f"Could not fetch token via CLI, falling back to env var. Reason: {e}")
+                token = os.environ.get("LEMMA_TOKEN")
 
         logger.info(
             f"LemmaClient init: token_present={bool(token)}, "
             f"pod_id={pod_id}, org_id={org_id}"
         )
-
-        custom_client = httpx.Client(timeout=180.0)
-        
-        if not token:
-            try:
-                config_path = os.path.expanduser("~/.lemma/config.json")
-                with open(config_path, "r") as f:
-                    config = json.load(f)
-                    token = config.get("token")
-            except Exception as e:
-                logger.warning(f"Failed to read lemma config: {e}")
         
         if token:
             self.client = lemma_sdk.Lemma(token=token, timeout=180.0)
