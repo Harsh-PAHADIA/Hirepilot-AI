@@ -15,6 +15,7 @@ from routes.applications import router as applications_router
 from routes.interview import router as interview_router
 from routes.tasks import router as tasks_router
 from routes.analytics import router as analytics_router
+from routes.test_lemma import router as test_lemma_router
 
 from workflows.placement_workflow import run_workflow
 
@@ -43,6 +44,7 @@ app.include_router(applications_router)
 app.include_router(interview_router)
 app.include_router(tasks_router)
 app.include_router(analytics_router)
+app.include_router(test_lemma_router)
 
 class AnalyzeRequest(BaseModel):
     resume: str
