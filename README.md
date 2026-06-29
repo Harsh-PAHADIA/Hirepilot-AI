@@ -273,7 +273,7 @@ This project is licensed under the **MIT License**.
 
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](#)
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](#)
-[![FastAPI/Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)](#)
+[![FastAPI](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)](#)
 [![Lemma SDK](https://img.shields.io/badge/Powered_by-Lemma_SDK-8A2BE2?style=for-the-badge)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](#)
 
@@ -511,4 +511,4 @@ While HirePilot AI currently handles the core placement workflow, our roadmap in
 ## 📄 License
 
 This project is licensed under the **MIT License**.
->>>>>>> 6d928ca (Fix AI parsing and deployment issues)
+
