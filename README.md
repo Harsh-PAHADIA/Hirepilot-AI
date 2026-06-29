@@ -252,12 +252,11 @@ it tells them what to do next.
 The result is an AI Placement Command Centre rather than another chatbot.
 
 
-## 👥 Team
+## 👤 Builder
 
 | Name | Role |
 | :--- | :--- |
-| **[Your Name]** | Full Stack Engineer & AI Integrator |
-| **[Teammate Name]** | Product Designer & Frontend Developer |
+| **Harshita Pahadia** | **Solo Builder** – Full Stack Development, AI Integration, UI/UX Design, Backend Development & Deployment |
 
 ---
 
