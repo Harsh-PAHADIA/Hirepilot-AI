@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <div align="center">
 
 # 🚀 HirePilot AI
