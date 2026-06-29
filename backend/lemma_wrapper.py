@@ -18,7 +18,7 @@ class LemmaClient:
     def __init__(self, api_key=None):
         pod_id = os.environ.get("LEMMA_POD_ID") or _DEFAULT_POD_ID
         org_id = os.environ.get("LEMMA_ORG_ID") or _DEFAULT_ORG_ID
-
+ 
         token = api_key
         if not token:
             try:
@@ -45,6 +45,13 @@ class LemmaClient:
 
         self.pod = self.client.pod(pod_id, org_id=org_id)
         logger.info("LemmaClient: pod client created successfully")
+
+        print("=== DEBUG ===") 
+        print("Token present:", bool(token))
+        print("Pod ID:", pod_id)
+        print("Org ID:", org_id)
+        print("Pod object:", self.pod)
+        print("=============")
 
     def _run_agent_sync(self, agent_slug: str, message: str) -> str:
         start_time = time.time()
@@ -100,11 +107,13 @@ class LemmaClient:
                 return last_text
 
         except Exception as e:
-            elapsed = time.time() - start_time
-            logger.error(
-                f"Agent {agent_slug}: exception after {elapsed:.2f}s: "
-                f"{type(e).__name__}: {e}\n{traceback.format_exc()}"
-            )
+            traceback.print_exc()
+            raise
+            # elapsed = time.time() - start_time
+            # logger.error(
+            #     f"Agent {agent_slug}: exception after {elapsed:.2f}s: "
+            #     f"{type(e).__name__}: {e}\n{traceback.format_exc()}"
+            # )
 
         return "{}"
 
@@ -246,8 +255,15 @@ class LemmaClient:
             return last_text or "{}"
 
         except Exception as e:
-            logger.error(f"interview-coach exception: {type(e).__name__}: {e}\n{traceback.format_exc()}")
-            return "{}"
+            import traceback
+            print("=== EXCEPTION ===")
+            print("Type:", type(e).__name__)
+            print("Message:", e)
+            traceback.print_exc()
+            print("=================")
+            raise
+            # logger.error(f"interview-coach exception: {type(e).__name__}: {e}\n{traceback.format_exc()}")
+            # return "{}"
 
     def generate_plan(self, gap_analysis_json: str) -> str:
         prompt = (
