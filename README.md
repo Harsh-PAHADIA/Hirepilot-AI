@@ -501,6 +501,23 @@ While HirePilot AI currently handles the core placement workflow, our roadmap in
 
 ---
 
+# ⭐ Why HirePilot AI is Different
+
+Unlike traditional AI resume analyzers that return long paragraphs of text,
+HirePilot AI converts AI outputs into structured actions.
+
+Instead of telling users what is wrong,
+it tells them what to do next.
+
+• Analyze resume
+• Compare against JD
+• Identify missing skills
+• Prioritize applications
+• Generate interview questions
+• Create personalized action plans
+
+The result is an AI Placement Command Centre rather than another chatbot.
+
 ## 👤 Developer
 
 **Harshita Pahadia**
