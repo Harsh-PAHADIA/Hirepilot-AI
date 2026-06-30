@@ -6,7 +6,7 @@
 
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](#)
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](#)
-[![FastAPI](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)](#)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](#)
 [![Lemma SDK](https://img.shields.io/badge/Powered_by-Lemma_SDK-8A2BE2?style=for-the-badge)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](#)
 
@@ -23,6 +23,9 @@ Powered by Lemma SDK***
 ## 🎯 Problem Statement?
 
 **The Placement Problem**
+
+HirePilot AI orchestrates multiple specialized AI agents using the Lemma SDK to transform unstructured AI outputs into structured placement intelligence.
+
 For students and job seekers, the placement journey is intensely fragmented. Candidates constantly bounce between static resume builders, generic AI chatbots for interview prep, chaotic spreadsheets for tracking applications, and scattered notes for skill improvement. 
 
 **The Flaw in Current AI Tools**
@@ -498,12 +501,16 @@ While HirePilot AI currently handles the core placement workflow, our roadmap in
 
 ---
 
-## 👥 Team
+## 👤 Developer
 
-| Name | Role |
-| :--- | :--- |
-| **[Your Name]** | Full Stack Engineer & AI Integrator |
-| **[Teammate Name]** | Product Designer & Frontend Developer |
+**Harshita Pahadia**
+
+- Solo Builder
+- Full Stack Developer
+- AI Integration
+- Backend Development
+- UI/UX Design
+- Deployment
 
 ---
 
