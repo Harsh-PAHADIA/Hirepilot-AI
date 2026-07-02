@@ -15,7 +15,7 @@ Powered by Lemma SDK***
 
 [🌐 Live Demo](https://hirepilot-ai-two.vercel.app/) ·
 [⚙️ Backend API](https://hirepilot-ai-d4ak.onrender.com/) ·
-[🎥 Demo Video](https://youtu.be/YOUR_VIDEO_LINK)
+[🎥 Demo Video](https://drive.google.com/file/d/1BDDwSfCrKTMmmkk5B_PBr5J38Mt_9xr6/view?usp=sharing)
 </div>
 
 ---
